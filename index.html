@@ -75,30 +75,28 @@
   </div>
 
   <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwz8jx5MfB2CuPFroTjdK3dogM3L_XngdQawu_JZh9RLY8gmchKZt3-MpwLq07Hh5WW1w/exec';
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbwz8jx5MfB2CuPFroTjdK3dogM3_LXngdQawu_JZh9RLY8gmchKZt3-MpwLq07Hh5WW1w/exec';
 
-    document.getElementById('userForm').addEventListener('submit', e => {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-      const data = Object.fromEntries(formData.entries());
+  document.getElementById('userForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
 
-      fetch(scriptURL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      })
-      .then(response => {
-        if (response.ok) {
-          alert("Form submitted successfully!");
-          e.target.reset();
-        } else {
-          alert("Failed to submit the form.");
-        }
-      })
-      .catch(error => {
-        alert("Error: " + error.message);
-      });
-    });
-  </script>
+    fetch(scriptURL, {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => {
+      if (response.ok) {
+        alert("Form submitted successfully!");
+        form.reset();
+      } else {
+        alert("Failed to submit.");
+      }
+    })
+    .catch(error => alert("Error: " + error.message));
+  });
+</script>
+
 </body>
 </html>
