@@ -75,7 +75,7 @@
   </div>
 
   <script>
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbwz8jx5MfB2CuPFroTjdK3dogM3_LXngdQawu_JZh9RLY8gmchKZt3-MpwLq07Hh5WW1w/exec';
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbwz8jx5MfB2CuPFroTjdK3dogM3L_XngdQawu_JZh9RLY8gmchKZt3-MpwLq07Hh5WW1w/exec';
 
   document.getElementById('userForm').addEventListener('submit', e => {
     e.preventDefault();
@@ -91,12 +91,17 @@
         alert("Form submitted successfully!");
         form.reset();
       } else {
-        alert("Failed to submit.");
+        alert("Form submission failed.");
       }
     })
-    .catch(error => alert("Error: " + error.message));
+    .catch(error => {
+      console.error("Error!", error.message);
+      alert("Error: " + error.message);
+    });
   });
 </script>
+
+    
 
 </body>
 </html>
