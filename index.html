@@ -1,107 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Printer Issue Form</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #f0f4f8;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .form-container {
-      background: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 500px;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #333;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    input, textarea, button {
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-    }
-
-    input:focus, textarea:focus {
-      border-color: #007BFF;
-      outline: none;
-    }
-
-    button {
-      background-color: #007BFF;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Printer Issue Form</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f7fa;
+    margin: 0;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+  }
+  form {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  label {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    display: block;
+  }
+  input[type="text"],
+  input[type="date"],
+  select,
+  textarea {
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    border: 1.8px solid #ccc;
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+  }
+  input[type="text"]:focus,
+  input[type="date"]:focus,
+  select:focus,
+  textarea:focus {
+    border-color: #4f46e5;
+    outline: none;
+  }
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  button {
+    background-color: #4f46e5;
+    color: white;
+    padding: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background-color: #4338ca;
+  }
+  .success-message, .error-message {
+    text-align: center;
+    font-weight: 600;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+  }
+  .success-message {
+    color: #166534;
+    background-color: #dcfce7;
+  }
+  .error-message {
+    color: #b91c1c;
+    background-color: #fee2e2;
+  }
+</style>
 </head>
 <body>
-  <div class="form-container">
-    <h2>Printer Toner Request</h2>
-    <form id="userForm">
-      <input type="text" name="name" placeholder="Your Name" required>
-      <input type="text" name="department" placeholder="Department" required>
-      <input type="date" name="date" required>
-      <input type="text" name="printer" placeholder="Printer Model" required>
-      <input type="text" name="toner" placeholder="Toner Type/Code" required>
-      <textarea name="issue" placeholder="Describe any issues..." rows="3" required></textarea>
-      <button type="submit">Submit</button>
-    </form>
-  </div>
 
-  <script>
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbwz8jx5MfB2CuPFroTjdK3dogM3L_XngdQawu_JZh9RLY8gmchKZt3-MpwLq07Hh5WW1w/exec';
+<form id="printerForm">
+  <h2 style="text-align:center;">Printer Issue Submission</h2>
+  
+  <label for="name">Name *</label>
+  <input type="text" id="name" name="name" placeholder="Your full name" required />
 
-  document.getElementById('userForm').addEventListener('submit', e => {
+  <label for="department">Department *</label>
+  <input type="text" id="department" name="department" placeholder="Your department" required />
+
+  <label for="date">Date *</label>
+  <input type="date" id="date" name="date" required />
+
+  <label for="printerModel">Printer Model *</label>
+  <input type="text" id="printerModel" name="printerModel" placeholder="Model of the printer" required />
+
+  <label for="tonerModel">Toner Model *</label>
+  <input type="text" id="tonerModel" name="tonerModel" placeholder="Model of the toner" required />
+
+  <label for="issues">Any Issues</label>
+  <textarea id="issues" name="issues" placeholder="Describe the issues here..."></textarea>
+
+  <button type="submit">Submit</button>
+
+  <div id="message"></div>
+</form>
+
+<script>
+  const form = document.getElementById('printerForm');
+  const messageDiv = document.getElementById('message');
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const form = e.target;
-    const formData = new FormData(form);
 
-    fetch(scriptURL, {
-      method: 'POST',
-      body: formData
-    })
-    .then(response => {
-      if (response.ok) {
-        alert("Form submitted successfully!");
+    // Clear previous messages
+    messageDiv.textContent = '';
+    messageDiv.className = '';
+
+    const data = {
+      name: form.name.value.trim(),
+      department: form.department.value.trim(),
+      date: form.date.value,
+      printerModel: form.printerModel.value.trim(),
+      tonerModel: form.tonerModel.value.trim(),
+      issues: form.issues.value.trim()
+    };
+
+    // Simple validation fallback (form required attributes mostly do this)
+    if (!data.name || !data.department || !data.date || !data.printerModel || !data.tonerModel) {
+      messageDiv.textContent = 'Please fill in all required fields.';
+      messageDiv.className = 'error-message';
+      return;
+    }
+
+    try {
+      const response = await fetch('https://script.google.com/macros/s/AKfycbwXqbtNr3PUJDEzHcYoO-NPZUa-BKXKqbVD0FO7A5vq2wF6hNNdzckm1c6sonUTOjJ_zA/exec', { // Replace with your deployed Apps Script URL
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (result.status === 'success') {
+        messageDiv.textContent = 'Form submitted successfully! Thank you.';
+        messageDiv.className = 'success-message';
         form.reset();
       } else {
-        alert("Form submission failed.");
+        throw new Error(result.message || 'Submission failed.');
       }
-    })
-    .catch(error => {
-      console.error("Error!", error.message);
-      alert("Error: " + error.message);
-    });
+    } catch (error) {
+      messageDiv.textContent = 'Error submitting form: ' + error.message;
+      messageDiv.className = 'error-message';
+    }
   });
 </script>
-
-    
 
 </body>
 </html>
